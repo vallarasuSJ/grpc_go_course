@@ -1,0 +1,14 @@
+syntax="proto3";
+
+package calculator; 
+
+option go_package="github.com/vallarasuSJ/grpc_go_course/calculator/proto"; 
+
+message MultiplyRequest{
+    int32 first_Number=1;
+    int32 second_Number=2; 
+}
+
+message MultiplyResponse{
+    int32 result=1;
+}
