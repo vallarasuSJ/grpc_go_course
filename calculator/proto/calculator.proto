@@ -8,10 +8,22 @@ import "sum.proto";
 import "multiply.proto"; 
 import "prime.proto"; 
 import "average.proto";
+import "max.proto"; 
+import "subtract.proto"; 
+import "fibonacci.proto";
+import "MaxEvenNumber.proto";  
+import "vowels.proto";
+
+
 
 service CalculatorService{
     rpc Sum(SumRequest) returns (SumResponse);
     rpc Multiply(MultiplyRequest) returns (MultiplyResponse);
     rpc Primes(PrimeRequest) returns (stream PrimeResponse); 
     rpc Average(stream AverageRequest) returns (AverageResponse);
+    rpc Max(stream MaxRequest) returns (stream MaxResponse);
+    rpc Subtract(SubRequest) returns (SubResponse); 
+    rpc Fibonacci(FibRequest) returns (stream FibResponse);
+    rpc MaxEvenNumber(stream EvenRequest) returns (EvenResponse); 
+    rpc VowelsCount(stream VowelRequest) returns (stream VowelResponse);
 }

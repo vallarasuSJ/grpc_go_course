@@ -21,10 +21,15 @@ func main() {
 
 	c:=pb.NewCalculatorServiceClient(conn) 
 
-	doSum(c) 
-	doMultiply(c) 
-	doPrimes(c)
-	doAverage(c)
+	// doSum(c) 
+	// doMultiply(c) 
+	// doPrimes(c)
+	// doAverage(c) 
+	// doMax(c)
+	// doSubtract(c)
+	// doFibonacci(c)
+	// doMaxEvenNumber(c)
+	doVowelsCount(c)
 
 
 }

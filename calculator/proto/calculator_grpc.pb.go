@@ -19,10 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	CalculatorService_Sum_FullMethodName      = "/calculator.CalculatorService/Sum"
-	CalculatorService_Multiply_FullMethodName = "/calculator.CalculatorService/Multiply"
-	CalculatorService_Primes_FullMethodName   = "/calculator.CalculatorService/Primes"
-	CalculatorService_Average_FullMethodName  = "/calculator.CalculatorService/Average"
+	CalculatorService_Sum_FullMethodName           = "/calculator.CalculatorService/Sum"
+	CalculatorService_Multiply_FullMethodName      = "/calculator.CalculatorService/Multiply"
+	CalculatorService_Primes_FullMethodName        = "/calculator.CalculatorService/Primes"
+	CalculatorService_Average_FullMethodName       = "/calculator.CalculatorService/Average"
+	CalculatorService_Max_FullMethodName           = "/calculator.CalculatorService/Max"
+	CalculatorService_Subtract_FullMethodName      = "/calculator.CalculatorService/Subtract"
+	CalculatorService_Fibonacci_FullMethodName     = "/calculator.CalculatorService/Fibonacci"
+	CalculatorService_MaxEvenNumber_FullMethodName = "/calculator.CalculatorService/MaxEvenNumber"
+	CalculatorService_VowelsCount_FullMethodName   = "/calculator.CalculatorService/VowelsCount"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -33,6 +38,11 @@ type CalculatorServiceClient interface {
 	Multiply(ctx context.Context, in *MultiplyRequest, opts ...grpc.CallOption) (*MultiplyResponse, error)
 	Primes(ctx context.Context, in *PrimeRequest, opts ...grpc.CallOption) (CalculatorService_PrimesClient, error)
 	Average(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_AverageClient, error)
+	Max(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_MaxClient, error)
+	Subtract(ctx context.Context, in *SubRequest, opts ...grpc.CallOption) (*SubResponse, error)
+	Fibonacci(ctx context.Context, in *FibRequest, opts ...grpc.CallOption) (CalculatorService_FibonacciClient, error)
+	MaxEvenNumber(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_MaxEvenNumberClient, error)
+	VowelsCount(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_VowelsCountClient, error)
 }
 
 type calculatorServiceClient struct {
@@ -127,6 +137,143 @@ func (x *calculatorServiceAverageClient) CloseAndRecv() (*AverageResponse, error
 	return m, nil
 }
 
+func (c *calculatorServiceClient) Max(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_MaxClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[2], CalculatorService_Max_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculatorServiceMaxClient{stream}
+	return x, nil
+}
+
+type CalculatorService_MaxClient interface {
+	Send(*MaxRequest) error
+	Recv() (*MaxResponse, error)
+	grpc.ClientStream
+}
+
+type calculatorServiceMaxClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculatorServiceMaxClient) Send(m *MaxRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *calculatorServiceMaxClient) Recv() (*MaxResponse, error) {
+	m := new(MaxResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *calculatorServiceClient) Subtract(ctx context.Context, in *SubRequest, opts ...grpc.CallOption) (*SubResponse, error) {
+	out := new(SubResponse)
+	err := c.cc.Invoke(ctx, CalculatorService_Subtract_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *calculatorServiceClient) Fibonacci(ctx context.Context, in *FibRequest, opts ...grpc.CallOption) (CalculatorService_FibonacciClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[3], CalculatorService_Fibonacci_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculatorServiceFibonacciClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type CalculatorService_FibonacciClient interface {
+	Recv() (*FibResponse, error)
+	grpc.ClientStream
+}
+
+type calculatorServiceFibonacciClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculatorServiceFibonacciClient) Recv() (*FibResponse, error) {
+	m := new(FibResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *calculatorServiceClient) MaxEvenNumber(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_MaxEvenNumberClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[4], CalculatorService_MaxEvenNumber_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculatorServiceMaxEvenNumberClient{stream}
+	return x, nil
+}
+
+type CalculatorService_MaxEvenNumberClient interface {
+	Send(*EvenRequest) error
+	CloseAndRecv() (*EvenResponse, error)
+	grpc.ClientStream
+}
+
+type calculatorServiceMaxEvenNumberClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculatorServiceMaxEvenNumberClient) Send(m *EvenRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *calculatorServiceMaxEvenNumberClient) CloseAndRecv() (*EvenResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(EvenResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *calculatorServiceClient) VowelsCount(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_VowelsCountClient, error) {
+	stream, err := c.cc.NewStream(ctx, &CalculatorService_ServiceDesc.Streams[5], CalculatorService_VowelsCount_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &calculatorServiceVowelsCountClient{stream}
+	return x, nil
+}
+
+type CalculatorService_VowelsCountClient interface {
+	Send(*VowelRequest) error
+	Recv() (*VowelResponse, error)
+	grpc.ClientStream
+}
+
+type calculatorServiceVowelsCountClient struct {
+	grpc.ClientStream
+}
+
+func (x *calculatorServiceVowelsCountClient) Send(m *VowelRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *calculatorServiceVowelsCountClient) Recv() (*VowelResponse, error) {
+	m := new(VowelResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility
@@ -135,6 +282,11 @@ type CalculatorServiceServer interface {
 	Multiply(context.Context, *MultiplyRequest) (*MultiplyResponse, error)
 	Primes(*PrimeRequest, CalculatorService_PrimesServer) error
 	Average(CalculatorService_AverageServer) error
+	Max(CalculatorService_MaxServer) error
+	Subtract(context.Context, *SubRequest) (*SubResponse, error)
+	Fibonacci(*FibRequest, CalculatorService_FibonacciServer) error
+	MaxEvenNumber(CalculatorService_MaxEvenNumberServer) error
+	VowelsCount(CalculatorService_VowelsCountServer) error
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -153,6 +305,21 @@ func (UnimplementedCalculatorServiceServer) Primes(*PrimeRequest, CalculatorServ
 }
 func (UnimplementedCalculatorServiceServer) Average(CalculatorService_AverageServer) error {
 	return status.Errorf(codes.Unimplemented, "method Average not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Max(CalculatorService_MaxServer) error {
+	return status.Errorf(codes.Unimplemented, "method Max not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Subtract(context.Context, *SubRequest) (*SubResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Subtract not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Fibonacci(*FibRequest, CalculatorService_FibonacciServer) error {
+	return status.Errorf(codes.Unimplemented, "method Fibonacci not implemented")
+}
+func (UnimplementedCalculatorServiceServer) MaxEvenNumber(CalculatorService_MaxEvenNumberServer) error {
+	return status.Errorf(codes.Unimplemented, "method MaxEvenNumber not implemented")
+}
+func (UnimplementedCalculatorServiceServer) VowelsCount(CalculatorService_VowelsCountServer) error {
+	return status.Errorf(codes.Unimplemented, "method VowelsCount not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 
@@ -250,6 +417,123 @@ func (x *calculatorServiceAverageServer) Recv() (*AverageRequest, error) {
 	return m, nil
 }
 
+func _CalculatorService_Max_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).Max(&calculatorServiceMaxServer{stream})
+}
+
+type CalculatorService_MaxServer interface {
+	Send(*MaxResponse) error
+	Recv() (*MaxRequest, error)
+	grpc.ServerStream
+}
+
+type calculatorServiceMaxServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculatorServiceMaxServer) Send(m *MaxResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *calculatorServiceMaxServer) Recv() (*MaxRequest, error) {
+	m := new(MaxRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _CalculatorService_Subtract_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CalculatorServiceServer).Subtract(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CalculatorService_Subtract_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CalculatorServiceServer).Subtract(ctx, req.(*SubRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _CalculatorService_Fibonacci_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(FibRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(CalculatorServiceServer).Fibonacci(m, &calculatorServiceFibonacciServer{stream})
+}
+
+type CalculatorService_FibonacciServer interface {
+	Send(*FibResponse) error
+	grpc.ServerStream
+}
+
+type calculatorServiceFibonacciServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculatorServiceFibonacciServer) Send(m *FibResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _CalculatorService_MaxEvenNumber_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).MaxEvenNumber(&calculatorServiceMaxEvenNumberServer{stream})
+}
+
+type CalculatorService_MaxEvenNumberServer interface {
+	SendAndClose(*EvenResponse) error
+	Recv() (*EvenRequest, error)
+	grpc.ServerStream
+}
+
+type calculatorServiceMaxEvenNumberServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculatorServiceMaxEvenNumberServer) SendAndClose(m *EvenResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *calculatorServiceMaxEvenNumberServer) Recv() (*EvenRequest, error) {
+	m := new(EvenRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _CalculatorService_VowelsCount_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CalculatorServiceServer).VowelsCount(&calculatorServiceVowelsCountServer{stream})
+}
+
+type CalculatorService_VowelsCountServer interface {
+	Send(*VowelResponse) error
+	Recv() (*VowelRequest, error)
+	grpc.ServerStream
+}
+
+type calculatorServiceVowelsCountServer struct {
+	grpc.ServerStream
+}
+
+func (x *calculatorServiceVowelsCountServer) Send(m *VowelResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *calculatorServiceVowelsCountServer) Recv() (*VowelRequest, error) {
+	m := new(VowelRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -265,6 +549,10 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 			MethodName: "Multiply",
 			Handler:    _CalculatorService_Multiply_Handler,
 		},
+		{
+			MethodName: "Subtract",
+			Handler:    _CalculatorService_Subtract_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -275,6 +563,28 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "Average",
 			Handler:       _CalculatorService_Average_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Max",
+			Handler:       _CalculatorService_Max_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Fibonacci",
+			Handler:       _CalculatorService_Fibonacci_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "MaxEvenNumber",
+			Handler:       _CalculatorService_MaxEvenNumber_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "VowelsCount",
+			Handler:       _CalculatorService_VowelsCount_Handler,
+			ServerStreams: true,
 			ClientStreams: true,
 		},
 	},

@@ -1,0 +1,13 @@
+syntax="proto3";
+
+package calculator;
+
+option go_package="github.com/vallarasuSJ/grpc_go_course/calculator/proto";  
+
+message VowelRequest{
+    string text=1;
+}
+
+message VowelResponse{
+    int32 result=1;
+}

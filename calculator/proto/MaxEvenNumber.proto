@@ -1,0 +1,14 @@
+syntax="proto3";
+
+package calculator;
+
+option go_package="github.com/vallarasuSJ/grpc_go_course/calculator/proto";   
+
+message EvenRequest{
+    int32 evenNumber=1;
+}
+
+message EvenResponse{
+    int32 result=1;
+}
+
