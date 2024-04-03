@@ -1,0 +1,16 @@
+syntax="proto3";
+
+package student; 
+
+option go_package="github.com/vallarasuSJ/grpc_go_course/student/proto"; 
+
+import "studentList.proto"; 
+import "google/protobuf/empty.proto";
+
+service StudentService{
+    rpc CreateStudent(StudentDetails) returns (StudentId); 
+    rpc ReadStudent(StudentId) returns (StudentDetails);
+    rpc UpdateStudent(StudentDetails) returns (google.protobuf.Empty); 
+    rpc ListStudents(google.protobuf.Empty) returns (stream StudentDetails); 
+    rpc DeleteStudent(StudentId) returns (google.protobuf.Empty);
+}

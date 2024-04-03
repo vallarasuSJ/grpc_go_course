@@ -29,7 +29,8 @@ func main() {
 	// doSubtract(c)
 	// doFibonacci(c)
 	// doMaxEvenNumber(c)
-	doVowelsCount(c)
+	// doVowelsCount(c) 
+	doSqrt(c)
 
 
 }

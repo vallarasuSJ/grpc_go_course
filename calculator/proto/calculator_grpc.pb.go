@@ -28,6 +28,7 @@ const (
 	CalculatorService_Fibonacci_FullMethodName     = "/calculator.CalculatorService/Fibonacci"
 	CalculatorService_MaxEvenNumber_FullMethodName = "/calculator.CalculatorService/MaxEvenNumber"
 	CalculatorService_VowelsCount_FullMethodName   = "/calculator.CalculatorService/VowelsCount"
+	CalculatorService_Sqrt_FullMethodName          = "/calculator.CalculatorService/Sqrt"
 )
 
 // CalculatorServiceClient is the client API for CalculatorService service.
@@ -43,6 +44,7 @@ type CalculatorServiceClient interface {
 	Fibonacci(ctx context.Context, in *FibRequest, opts ...grpc.CallOption) (CalculatorService_FibonacciClient, error)
 	MaxEvenNumber(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_MaxEvenNumberClient, error)
 	VowelsCount(ctx context.Context, opts ...grpc.CallOption) (CalculatorService_VowelsCountClient, error)
+	Sqrt(ctx context.Context, in *SqrtRequest, opts ...grpc.CallOption) (*SqrtResponse, error)
 }
 
 type calculatorServiceClient struct {
@@ -274,6 +276,15 @@ func (x *calculatorServiceVowelsCountClient) Recv() (*VowelResponse, error) {
 	return m, nil
 }
 
+func (c *calculatorServiceClient) Sqrt(ctx context.Context, in *SqrtRequest, opts ...grpc.CallOption) (*SqrtResponse, error) {
+	out := new(SqrtResponse)
+	err := c.cc.Invoke(ctx, CalculatorService_Sqrt_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CalculatorServiceServer is the server API for CalculatorService service.
 // All implementations must embed UnimplementedCalculatorServiceServer
 // for forward compatibility
@@ -287,6 +298,7 @@ type CalculatorServiceServer interface {
 	Fibonacci(*FibRequest, CalculatorService_FibonacciServer) error
 	MaxEvenNumber(CalculatorService_MaxEvenNumberServer) error
 	VowelsCount(CalculatorService_VowelsCountServer) error
+	Sqrt(context.Context, *SqrtRequest) (*SqrtResponse, error)
 	mustEmbedUnimplementedCalculatorServiceServer()
 }
 
@@ -320,6 +332,9 @@ func (UnimplementedCalculatorServiceServer) MaxEvenNumber(CalculatorService_MaxE
 }
 func (UnimplementedCalculatorServiceServer) VowelsCount(CalculatorService_VowelsCountServer) error {
 	return status.Errorf(codes.Unimplemented, "method VowelsCount not implemented")
+}
+func (UnimplementedCalculatorServiceServer) Sqrt(context.Context, *SqrtRequest) (*SqrtResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Sqrt not implemented")
 }
 func (UnimplementedCalculatorServiceServer) mustEmbedUnimplementedCalculatorServiceServer() {}
 
@@ -534,6 +549,24 @@ func (x *calculatorServiceVowelsCountServer) Recv() (*VowelRequest, error) {
 	return m, nil
 }
 
+func _CalculatorService_Sqrt_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SqrtRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CalculatorServiceServer).Sqrt(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CalculatorService_Sqrt_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CalculatorServiceServer).Sqrt(ctx, req.(*SqrtRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CalculatorService_ServiceDesc is the grpc.ServiceDesc for CalculatorService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -552,6 +585,10 @@ var CalculatorService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Subtract",
 			Handler:    _CalculatorService_Subtract_Handler,
+		},
+		{
+			MethodName: "Sqrt",
+			Handler:    _CalculatorService_Sqrt_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

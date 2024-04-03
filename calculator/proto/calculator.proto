@@ -12,7 +12,8 @@ import "max.proto";
 import "subtract.proto"; 
 import "fibonacci.proto";
 import "MaxEvenNumber.proto";  
-import "vowels.proto";
+import "vowels.proto"; 
+import "sqrt.proto";
 
 
 
@@ -25,5 +26,6 @@ service CalculatorService{
     rpc Subtract(SubRequest) returns (SubResponse); 
     rpc Fibonacci(FibRequest) returns (stream FibResponse);
     rpc MaxEvenNumber(stream EvenRequest) returns (EvenResponse); 
-    rpc VowelsCount(stream VowelRequest) returns (stream VowelResponse);
+    rpc VowelsCount(stream VowelRequest) returns (stream VowelResponse); 
+    rpc Sqrt (SqrtRequest)returns (SqrtResponse);
 }

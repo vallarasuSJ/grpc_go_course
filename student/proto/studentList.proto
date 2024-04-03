@@ -1,0 +1,15 @@
+syntax="proto3";
+
+package student; 
+
+option go_package="github.com/vallarasuSJ/grpc_go_course/student/proto"; 
+
+message StudentDetails{
+    string id=1;
+    string name=2;
+    string age=3;
+}
+
+message StudentId{
+    string id=1;
+}
